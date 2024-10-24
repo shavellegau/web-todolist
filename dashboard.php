@@ -268,6 +268,15 @@ if (empty($_SESSION["id"])) {
             width: 100%;
         }
 
+        .popup-content textarea {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid var(--form-border);
+            border-radius: 4px;
+            resize: vertical;
+        }
+
         .delete-confirmation {
             display: none;
             position: fixed;
@@ -608,7 +617,8 @@ if (empty($_SESSION["id"])) {
             <div class="popup-content">
                 <span class="close-popup" onclick="closePopup()">X</span>
                 <h3>Edit Task</h3>
-                <input type="text" id="editTaskInput" required>
+                <input type="text" id="editTaskTitleInput" placeholder="Task Title" required>
+                <textarea id="editTaskDescriptionInput" placeholder="Write ur tasks..." required></textarea>
                 <select id="editTaskPriority">
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -696,7 +706,6 @@ if (empty($_SESSION["id"])) {
             const taskDescription = document.getElementById('taskInput').value;
             const taskPriority = document.getElementById('taskPriority').value;
 
-            // Simpan data ke array tasks
             tasks.push({
                 title: taskTitleInput,
                 description: taskDescription,
@@ -721,7 +730,8 @@ if (empty($_SESSION["id"])) {
         const openEditPopup = (index) => {
             currentEditIndex = index;
             const task = tasks[index];
-            document.getElementById('editTaskInput').value = task.text;
+            document.getElementById('editTaskTitleInput').value = task.title;
+            document.getElementById('editTaskDescriptionInput').value = task.description;
             document.getElementById('editTaskPriority').value = task.priority;
             document.getElementById('editPopup').style.display = 'flex';
         };
@@ -732,11 +742,13 @@ if (empty($_SESSION["id"])) {
         };
 
         const saveEditTask = () => {
-            const newText = document.getElementById('editTaskInput').value;
+            const newTitle = document.getElementById('editTaskTitleInput').value;
+            const newDescription = document.getElementById('editTaskDescriptionInput').value;
             const newPriority = document.getElementById('editTaskPriority').value;
 
             if (currentEditIndex !== null) {
-                tasks[currentEditIndex].text = newText;
+                tasks[currentEditIndex].title = newTitle;
+                tasks[currentEditIndex].description = newDescription;
                 tasks[currentEditIndex].priority = newPriority;
                 updateTasksList();
                 updateStats();
